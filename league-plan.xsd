@@ -1,0 +1,97 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:complexType name="association-plan">
+        <xsd:all minOccurs="1">
+            <xsd:element name="players" type="players"/>
+            <xsd:element name="association" type="association"/>
+            <xsd:element name="clubs" type="clubs"/>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="players">
+        <xsd:sequence>
+            <xsd:element name="player" type="player" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="player">
+        <xsd:sequence>
+            <xsd:element name="first-name" type="xsd:string"/>
+            <xsd:element name="middle-name" type="xsd:string" minOccurs="0" maxOccurs="2"/>
+            <xsd:element name="last-name" type="xsd:string"/>
+        </xsd:sequence>
+        <xsd:attribute name="birth-country" type="xsd:string"/>
+        <xsd:attribute name="birth-date" type="xsd:date"/>
+        <xsd:attribute name="pid" type="pid" use="required"/>
+    </xsd:complexType>
+
+    <xsd:simpleType name="pid">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="Player([0-9])+"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="association">
+        <xsd:sequence>
+            <xsd:element name="league" type="league" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="league">
+        <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+            <xsd:element name="team" type="leagueClub"/>
+            <xsd:element name="info" type="info" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="leagueClub">
+        <xsd:attribute name="team_ref" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="info" mixed="true">
+        <xsd:sequence>
+            <xsd:element name="first-matchday" type="xsd:date"/>
+            <xsd:element name="first-stadium" type="xsd:string"/>
+            <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+                <xsd:element name="interview-date" type="xsd:date"/>
+                <xsd:element name="room" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:sequence>
+        <xsd:attribute name="registered-squad-size" type="xsd:positiveInteger"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="clubs">
+        <xsd:sequence>
+            <xsd:element name="club" type="clubsClub" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="clubsClub">
+        <xsd:all minOccurs="1">
+            <xsd:element name="founded" type="xsd:date"/>
+            <xsd:element name="positions" type="positions"/>
+            <xsd:element name="name" type="xsd:string"/>
+        </xsd:all>
+        <xsd:attribute name="cid" type="cid" use="required"/>
+    </xsd:complexType>
+
+    <xsd:simpleType name="cid">
+        <xsd:restriction>
+            <xsd:pattern value="[A-Z][a-z]{1,4}[0-9]{0,1}#[0-9]{2}#[0-9][A-Z][0-9]"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="positions">
+        <xsd:sequence>
+            <xsd:element name="goalkeeper" type="position" maxOccurs="3"/>
+            <xsd:element name="field-player" type="position" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="position">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+</xsd:schema>
